@@ -220,7 +220,7 @@ def most_points_scored
 end
 
 def winning_team
-  game_hash[:home].each do |keys, values|
+  game_hash.each do |keys, values|
     binding.pry
   end
 end
