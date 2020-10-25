@@ -218,9 +218,3 @@ def most_points_scored
     end
   end
 end
-
-def winning_team
-  game_hash.each do |keys, values|
-    binding.pry
-  end
-end
