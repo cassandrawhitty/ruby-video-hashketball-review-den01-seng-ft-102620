@@ -135,10 +135,6 @@ def find_player_by_name name
   players.find{ |player| name == player[:player_name] }
 end
 
-# def find_team_by_name team 
-#   game_hash.find{ |home_or_away| team == home_or_away[:team_name] }
-# end
-
 def num_points_scored(player_name)
   find_player_by_name(player_name)[:points]
 end
@@ -158,50 +154,45 @@ def team_colors(team)
 end 
 
 def team_names
-  names_of_teams = []
-  game_hash.each do |home_or_away, info|
-    names_of_teams.push(info[:team_name])
+  game_hash.values.map do |teams|
+    teams[:team_name]
   end
-  return names_of_teams
 end
 
 def player_numbers(team_n)
-  jersey_numbers = []
-  game_hash.each do |home_or_away, info|
-    if team_n == info[:team_name]
-      info[:players].each do |keys, values|
-        jersey_numbers.push(keys[:number])
-      end
-    end
+  find_team_by_name(team_n)[:players].map do |player|
+    player[:number]
   end
-  return jersey_numbers
 end
 
-def player_stats(player_n)
-  game_hash.each do |home_or_away, info|
-    info[:players].each do |player, values|
-      if player_n == player[:player_name]
-        return player
-      end
-    end
-  end
+def player_stats name
+  find_player_by_name(name)
 end
 
 def big_shoe_rebounds
-  largest_shoe = 0
-  game_hash.each do |home_or_away, info|
-    info[:players].each do |keys, values|
-      if keys[:shoe] > largest_shoe
-        largest_shoe = keys[:shoe]
-      end
+  player = players.reduce do |biggest_shoe_player, current_shoe_player|
+
+    if current_shoe_player[:shoe] > biggest_shoe_player[:shoe]
+      biggest_shoe_player = current_shoe_player
     end
-    info[:players].each do |keys, values|
-      if keys[:shoe] == largest_shoe
-        return keys[:rebounds]
-      end
-    end
+    biggest_shoe_player
   end
+  player[:rebounds]
 end
+
+ # largest_shoe = 0
+  # game_hash.each do |home_or_away, info|
+  #   info[:players].each do |keys, values|
+  #     if keys[:shoe] > largest_shoe
+  #       largest_shoe = keys[:shoe]
+  #     end
+  #   end
+  #   info[:players].each do |keys, values|
+  #     if keys[:shoe] == largest_shoe
+  #       return keys[:rebounds]
+  #     end
+  #   end
+  # end
 
 def most_points_scored
   most_points = 0
